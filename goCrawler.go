@@ -21,7 +21,7 @@ func main() {
 			// For each item found, get the title
 			title := s.Find("a").Text() //get a tag variable
 			out, _ := iconv.ConvertString(string(title), "euc-kr", "utf-8") //decode
-			titles = append(titles, out) //add variable
+			titles = append(titles, out[14:]) //add variable
 		})
 
 		for i := 0; i < len(titles); i++ {
