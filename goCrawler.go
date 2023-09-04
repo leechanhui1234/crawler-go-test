@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	url := "https://www.g2b.go.kr:8101/ep/tbid/tbidList.do?searchType=1&bidSearchType=1&taskClCds=5&bidNm=%BA%ED%B7%CF%C3%BC%C0%CE&searchDtType=1&fromBidDt=2018%2F2%2F01&toBidDt=2018%2F3%2F01&setMonth1=1&fromOpenBidDt=&toOpenBidDt=&radOrgan=1&instNm=&instSearchRangeType=&refNo=&area=&areaNm=&strArea=&orgArea=&industry=&industryCd=&upBudget=&downBudget=&budgetCompare=&detailPrdnmNo=&detailPrdnm=&procmntReqNo=&intbidYn=&regYn=Y&recordCountPerPage=100" //나라장터 url
+	url := "https://www.g2b.go.kr:8101/ep/tbid/tbidList.do?searchType=1&bidSearchType=1&taskClCds=5&bidNm=%BA%ED%B7%CF%C3%BC%C0%CE&searchDtType=1&fromBidDt=2018%2F4%2F01&toBidDt=2018%2F5%2F01&setMonth1=1&fromOpenBidDt=&toOpenBidDt=&radOrgan=1&instNm=&instSearchRangeType=&refNo=&area=&areaNm=&strArea=&orgArea=&industry=&industryCd=&upBudget=&downBudget=&budgetCompare=&detailPrdnmNo=&detailPrdnm=&procmntReqNo=&intbidYn=&regYn=Y&recordCountPerPage=100" //나라장터 url
 	titles := []string{} //declare array
 	res, _ := http.Get(url) //Get Http
 		doc, _ := goquery.NewDocumentFromResponse(res) //get html origin
@@ -24,5 +24,7 @@ func main() {
 			titles = append(titles, out) //add variable
 		})
 
-		fmt.Println(titles) //print arrays
+		for i := 0; i < len(titles); i++ {
+			fmt.Println(titles[i]) //print array valuable
+		}
 }
