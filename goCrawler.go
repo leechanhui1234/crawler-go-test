@@ -3,17 +3,22 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
+	// "strconv"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
 func main() {
-	url := "https://yepp0517.tistory.com/"
+	url := "https://yepp0517.tistory.com/2"
 
-	for i := 2; i < 5; i++ {
-		res, _ := http.Get(url + strconv.Itoa(i))
+	res, _ := http.Get(url)
 		doc, _ := goquery.NewDocumentFromResponse(res)
-		fmt.Println(doc.Find("h4").Text())
-	}
+
+		links := doc.Find(".tt_article_useless_p_margin")
+		
+		links.Each(func(i int, s *goquery.Selection) {
+			// For each item found, get the title
+			title := s.Find("#og_1627608827011").Text()
+			fmt.Printf("Review %d: %s\n", i, title)
+		})
 }
