@@ -20,7 +20,7 @@ var collection *mongo.Collection
 
 func init() {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI("mongodb+srv://chanhuilee:rnFQYCYxJ56w6PJ3@cluster0.g79oeik.mongodb.net/?retryWrites=true&w=majority").SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI("<<local address>>").SetServerAPIOptions(serverAPI)
 	// Create a new client and connect to the server
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
