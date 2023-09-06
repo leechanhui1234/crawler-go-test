@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,18 +16,32 @@ type Trainer struct {
 	description   string `bson:"description"`
 }
 
-func insertData(ctx context.Context, collection *mongo.Collection) {
-	dt, _ := collection.InsertOne(ctx, bson.D{{Key: "name", Value: "Ash"}, {Key: "age", Value: 10}, {Key: "description", Value: "Pallet Town"}})
+var collection *mongo.Collection
+
+func init() {
+	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+	opts := options.Client().ApplyURI("mongodb+srv://chanhuilee:rnFQYCYxJ56w6PJ3@cluster0.g79oeik.mongodb.net/?retryWrites=true&w=majority").SetServerAPIOptions(serverAPI)
+	// Create a new client and connect to the server
+	client, err := mongo.Connect(context.TODO(), opts)
+	if err != nil {
+	  panic(err)
+	}
+
+	collection = client.Database("test").Collection("trainers")
+}
+
+func insertData() {
+	dt, _ := collection.InsertOne(context.TODO(), bson.D{{Key: "name", Value: "Ash"}, {Key: "age", Value: 10}, {Key: "description", Value: "Pallet Town"}})
 	fmt.Println(dt)
 }
 
-func getData(ctx context.Context, collection *mongo.Collection) {
+func getData() {
 	var datas []bson.M
 	// 데이터 읽기
-    res, err := collection.Find(ctx, bson.D{{}})
+    res, err := collection.Find(context.TODO(), bson.D{{}})
 	
     // 결과를 변수에 담기
-    if err = res.All(ctx, &datas); err != nil {
+    if err = res.All(context.TODO(), &datas); err != nil {
         fmt.Println(err)
     }
     
@@ -64,30 +77,8 @@ func getData(ctx context.Context, collection *mongo.Collection) {
 // }
 
 func main () {
-	// Use the SetServerAPIOptions() method to set the Stable API version to 1
-	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI("<<input local db uri>>").SetServerAPIOptions(serverAPI)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	// Create a new client and connect to the server
-	client, err := mongo.Connect(ctx, opts)
-	if err != nil {
-	  panic(err)
-	}
-	defer func() {
-	  if err = client.Disconnect(ctx); err != nil {
-		panic(err)
-	  }
-	}()
-	// Send a ping to confirm a successful connection
-	if err := client.Database("admin").RunCommand(ctx, bson.D{{"ping", 1}}).Err(); err != nil {
-	  panic(err)
-	}
-	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
-
-	collection := client.Database("test").Collection("trainers")
-	insertData(ctx, collection)
-	getData(ctx, collection)
+	insertData()
+	getData()
 }
 
  
